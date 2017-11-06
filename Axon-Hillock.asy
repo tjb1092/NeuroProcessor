@@ -1,0 +1,14 @@
+Version 4
+SymbolType BLOCK
+LINE Normal 0 -48 0 48
+LINE Normal 80 0 0 -48
+LINE Normal 0 48 80 0
+PIN 0 0 NONE 8
+PINATTR PinName Iin
+PINATTR SpiceOrder 1
+PIN 80 0 NONE 8
+PINATTR PinName Vout
+PINATTR SpiceOrder 2
+PIN 32 16 NONE 8
+PINATTR PinName Vmem
+PINATTR SpiceOrder 3
