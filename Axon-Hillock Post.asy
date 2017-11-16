@@ -8,8 +8,8 @@ LINE Normal 0 0 0 16
 LINE Normal 32 0 48 0
 LINE Normal 16 8 16 16
 WINDOW 0 -44 -33 Left 2
-SYMATTR SpiceLine Rinhibit
-SYMATTR Value axon-hillock
+SYMATTR SpiceLine Rinhib = 5Meg
+SYMATTR Value axon-hillock post
 PIN -16 0 NONE 8
 PINATTR PinName Vin
 PINATTR SpiceOrder 1
