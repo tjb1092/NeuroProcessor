@@ -1,0 +1,54 @@
+Version 4
+
+#Defines the entire workspace the circuit sits within
+SHEET 1 880 680
+
+Coordinates for the wires: : [Bottom X, Bottom Y, Top X, Top Y]
+WIRE 64 160 64 128
+WIRE 64 272 64 240
+
+#This is Ground. Probably the location of the port.
+FLAG 64 272 0
+
+#This is the label tag
+FLAG 64 48 VLabel
+
+#Probably sets the label to an output port
+IOPIN 64 48 Out
+
+#The height of a voltage element is 256-176 = 80
+#The separation between voltage elements (that visually looks alright) = 176-144 = 32
+#The separation between the last voltage element and ground is: 272-256 = 16
+
+#In order to add a new element, we need to add a new wire, and a new voltage source.
+#Therefore the previous 2nd argument in the Flag 0 height should be increased by 112
+
+#For the voltage symbol itself, add 112 between them as well.
+
+SYMBOL voltage 64 32 R0
+WINDOW 123 0 0 Left 2
+WINDOW 39 0 0 Left 2
+SYMATTR InstName V1
+SYMATTR Value PULSE(0 1 10 .1 .1 1 3 10)
+SYMBOL voltage 64 144 R0
+WINDOW 123 0 0 Left 2
+WINDOW 39 0 0 Left 2
+SYMATTR InstName V2
+SYMATTR Value PULSE(-5 5 5 .1 .1 1 3 10)
+
+
+###My attempted custom addition appended to the file:
+WIRE 64 288 64 256
+SYMBOL voltage 64 272 R0
+WINDOW 123 0 0 Left 2
+WINDOW 39 0 0 Left 2
+SYMATTR InstName V3
+SYMATTR Value PULSE(0 69 10 .1 .1 1 3 10)
+
+also changed the following by adding 112 to them.
+FLAG 64 272 0
+WIRE 64 272 64 256
+
+#Algo: Delete wire and line associated w/ Flag 0.
+Append to the file with the sources, finally followed
+by the Flag 0 and updated associated wire.
