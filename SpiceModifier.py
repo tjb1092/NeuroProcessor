@@ -39,7 +39,7 @@ GndElement_params = [int(s) for s in GndElement.split() if s.isdigit()]
 
 PulseParams = [0,1,1,0.1,0.1,1,3,10]  #Test set for now
 element_count = 0
-for element in range(0,1):
+for element in range(0,2):
 
     element_count += 1
     WireStart += 112
@@ -55,12 +55,14 @@ for element in range(0,1):
     content.append("SYMATTR Value PULSE("+str(PulseParams[0])+" "+str(PulseParams[1])+" "+\
                     str(PulseParams[2])+" "+str(PulseParams[3])+" "+str(PulseParams[4])+" "+\
                     str(PulseParams[5])+" "+str(PulseParams[6])+" "+str(PulseParams[7])+")")
-    content.append("WIRE 64 "+str(GndStart+16)+" 64 "+str(GndStart))
-    content.append("FLAG 64 "+str(GndStart+16)+" 0")
 
 
     for line in content:
         print(line)
+        
+#Should only add the ground at the end!!!
+content.append("WIRE 64 "+str(GndStart+16)+" 64 "+str(GndStart))
+content.append("FLAG 64 "+str(GndStart+16)+" 0")
 
 voltage_element_fn = fname = os.path.join(dir_path, 'SimInput','OutputLabels.asc')
 
