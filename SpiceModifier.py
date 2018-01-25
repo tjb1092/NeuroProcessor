@@ -1,73 +1,46 @@
 import os
 
-# This will be automated later, just for testing.
-num_elements = input("Please enter the number of voltage elements you want to have: ")
+def GenerateLabels(outputPattern):
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    fname = os.path.join(dir_path, 'SimInput','Template.asc')
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-fname = os.path.join(dir_path, 'SimInput','Template.asc')
+    # Open Template & read into list
+    with open(fname) as f:
+        content = f.readlines()
 
-# Open Template & read into list
-with open(fname) as f:
-    content = f.readlines()
+    # Hard coded indicies to the PWL commands
+    IndexList =[46, 51, 56, 61, 66, 71, 76, 81]
 
-GndWire = content[3]
-GndElement = content[6]
-FirstVoltageElement = content[7] #Need this to know where to put subsequent elements
+    labelPattern =[[1,5,1,5,1,5,1,5],
+                   [4,2,4,2,4,2,4,2]]
 
-# Remove gnd element
-del content[6]
-del content[3]
+    source_counter = 0
+    for index in IndexList:
+        #For each source, append the correct information per sample to the string.
+        newString = "SYMATTR Value PWL("
 
-print(GndWire)
-print(GndElement)
+        for row in outputPattern:
+            if row[1] == 0:
+                pattern = 0 # 1st and last voltage should be 0
+            else:
+                pattern = labelPattern[row[1]-1][source_counter] # Gets V1 or V2 pattern
+            newString += " " + "{0:.3f}".format(row[0]) + " " + str(pattern)
 
-VHeight = 112
+        newString += ")\n"
+        print(newString)
 
-# Hardcoding this just for convinience.
-#I'm hardcoding the indicies in the template, so it's kinda the same thing.
-Vstart = 48
+        content[index] = newString #Override template w/ new command
 
-WireStart = 32
-GndStart = 144
+        source_counter += 1
 
-
-
-# Extract coordinate parameters from the strings so that I can manipulate them.
-GndWire_params = [int(s) for s in GndWire.split() if s.isdigit()]
-GndElement_params = [int(s) for s in GndElement.split() if s.isdigit()]
-
-
-PulseParams = [0,1,1,0.1,0.1,1,3,10]  #Test set for now
-element_count = 0
-for element in range(0,2):
-
-    element_count += 1
-    WireStart += 112
-    Vstart += 112
-    GndStart += 112
-    # Block of content to write to schematic to add the new voltage element.
-    # None string components need to be determined. (sleep now though).
-    content.append("WIRE 64 "+str(WireStart+32)+" 64 "+str(WireStart))
-    content.append("SYMBOL voltage 64 "+str(Vstart)+" R0")
-    content.append("WINDOW 123 0 0 Left 2")
-    content.append("WINDOW 39 0 0 Left 2")
-    content.append("SYMATTR InstName V"+str(element_count+1))
-    content.append("SYMATTR Value PULSE("+str(PulseParams[0])+" "+str(PulseParams[1])+" "+\
-                    str(PulseParams[2])+" "+str(PulseParams[3])+" "+str(PulseParams[4])+" "+\
-                    str(PulseParams[5])+" "+str(PulseParams[6])+" "+str(PulseParams[7])+")")
-
-    #Debug
     for line in content:
         print(line)
 
-#Should only add the ground at the end!!!
-content.append("WIRE 64 "+str(GndStart+16)+" 64 "+str(GndStart))
-content.append("FLAG 64 "+str(GndStart+16)+" 0")
+    input("Pause")
+    voltage_element_fn = fname = os.path.join(dir_path, 'OutputLabels.asc')
 
-voltage_element_fn = fname = os.path.join(dir_path, 'SimInput','OutputLabels.asc')
-
-data_file = open(voltage_element_fn, "w")
-for line in content:
-    data_file.write("%s\n" % line)
-data_file.close()
-print("Voltage Element Created!")
+    data_file = open(voltage_element_fn, "w")
+    for line in content:
+        data_file.write("%s" % line)
+    data_file.close()
+    print("Voltage Array Created!")

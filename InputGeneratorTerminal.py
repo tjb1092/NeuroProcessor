@@ -5,7 +5,7 @@ from pydub import AudioSegment
 from random import shuffle, sample
 import math
 import pickle
-
+from SpiceModifier import GenerateLabels
 
 def Random_Random(v1, v2, audio):
     Train_Split_Percent = 0.8
@@ -17,7 +17,7 @@ def Random_Random(v1, v2, audio):
     V1 = []
     for dirpath, dirs, files in os.walk(os.path.join(audio, v1)):
         for afile in files:
-            V1.append((os.path.join(audio,v1,afile),"V1")) # Make the file a tuple to have a label
+            V1.append((os.path.join(audio,v1,afile), 1)) # Make the file a tuple to have a label
 
     shuffle(V1) # Randomize list order
 
@@ -31,7 +31,7 @@ def Random_Random(v1, v2, audio):
     V2 = []
     for dirpath, dirs, files in os.walk(os.path.join(audio, v2)):
         for afile in files:
-            V2.append((os.path.join(audio,v2,afile), "V2"))
+            V2.append((os.path.join(audio,v2,afile), 2))
 
     shuffle(V2) # Randomize list order
 
@@ -73,15 +73,32 @@ def Random_Random(v1, v2, audio):
     # but I don't think it is likely without changing the code.
     V_Train_Wav = AudioSegment.from_wav(V_train[0][0])
 
+    total_duration = 0.0
+    outputPattern = [[0.0,0]] # Start "off"
     for clip in V_train[1:len(V_train)]:
         sound = AudioSegment.from_wav(clip[0])  # Index into the tuple to  get the filename
+
+        outputPattern.append([total_duration+.01, clip[1]])  # Add +0.01 to that you get an effective step function.
+
+        total_duration += sound.duration_seconds
+        outputPattern.append([total_duration, clip[1]])
+
         V_Train_Wav = V_Train_Wav + sound
 
+    outputPattern.append([total_duration+.01, 0])  # Turn labels off after signal passes through.
     print("V_train duration:" )
     print(V_Train_Wav.duration_seconds)
 
     print("Len of VTrain:")
     print(len(V_train))
+
+    print("Testing the output timing")
+    for row in outputPattern:
+        print(row)
+
+    # Generate Output Labels
+    GenerateLabels(outputPattern)
+
 
     silence = V_Train_Wav - 100  # Creates hopefully a file that is basically silent. -100dB might be overkill
 
@@ -99,6 +116,8 @@ def Random_Random(v1, v2, audio):
 
     for clip in V_test[1:len(V_test)]:
         sound = AudioSegment.from_wav(clip[0])  # Index into the tuple to  get the filename
+
+
         V_Test_Wav = V_Test_Wav + sound
 
     print("V_test duration w/o silence")
