@@ -120,8 +120,15 @@ def Random_Random(v1, v2, audio):
 
     data = {"Train": V_train, "Test": V_test}
     pickle.dump( data, open( os.path.join('.', "SimInput", "data_info.p"), "wb" ) )
-
-
+    Success = """
+       _____                             _
+      / ____|                           | |
+     | (___  _   _  ___ ___ ___  ___ ___| |
+      \___ \| | | |/ __/ __/ _ \/ __/ __| |
+      ____) | |_| | (_| (_|  __/\__ \__ \_|
+     |_____/ \__,_|\___\___\___||___/___(_)
+    """
+    print(Success)
     return data
 
 
