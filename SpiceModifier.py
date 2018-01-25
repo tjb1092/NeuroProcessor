@@ -56,10 +56,10 @@ for element in range(0,2):
                     str(PulseParams[2])+" "+str(PulseParams[3])+" "+str(PulseParams[4])+" "+\
                     str(PulseParams[5])+" "+str(PulseParams[6])+" "+str(PulseParams[7])+")")
 
-
+    #Debug
     for line in content:
         print(line)
-        
+
 #Should only add the ground at the end!!!
 content.append("WIRE 64 "+str(GndStart+16)+" 64 "+str(GndStart))
 content.append("FLAG 64 "+str(GndStart+16)+" 0")

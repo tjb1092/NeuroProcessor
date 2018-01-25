@@ -52,3 +52,12 @@ WIRE 64 272 64 256
 #Algo: Delete wire and line associated w/ Flag 0.
 Append to the file with the sources, finally followed
 by the Flag 0 and updated associated wire.
+
+Okay, so here's what I need:
+1.) Move all of the code into a function that will be imported into the main
+func.
+2.) 
+
+
+
+
