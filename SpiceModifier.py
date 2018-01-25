@@ -9,7 +9,7 @@ def GenerateLabels(outputPattern):
         content = f.readlines()
 
     # Hard coded indicies to the PWL commands
-    IndexList =[46, 51, 56, 61, 66, 71, 76, 81]
+    IndexList =[46, 52, 59, 64, 70, 76, 82, 88]
 
     labelPattern =[[1,5,1,5,1,5,1,5],
                    [4,2,4,2,4,2,4,2]]
@@ -33,10 +33,6 @@ def GenerateLabels(outputPattern):
 
         source_counter += 1
 
-    for line in content:
-        print(line)
-
-    input("Pause")
     voltage_element_fn = fname = os.path.join(dir_path, 'OutputLabels.asc')
 
     data_file = open(voltage_element_fn, "w")

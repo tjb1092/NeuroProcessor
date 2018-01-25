@@ -69,12 +69,20 @@ def Random_Random(v1, v2, audio):
     V_train = V1[0:V1_trainLen] + V2[0:V2_trainLen]
     shuffle(V_train) # Shuffle the two files together
 
+    #Init output label info.
+    total_duration = 0.0
+    outputPattern = [[0.0,0]] # Start "off"
+
+
     # Dummy one to instantiate object. Maybe it can be constructed w/o an input,
     # but I don't think it is likely without changing the code.
     V_Train_Wav = AudioSegment.from_wav(V_train[0][0])
 
-    total_duration = 0.0
-    outputPattern = [[0.0,0]] # Start "off"
+    outputPattern.append([total_duration+.01, V_train[0][1]])  # Add +0.01 to that you get an effective step function.
+    total_duration += V_Train_Wav.duration_seconds
+    outputPattern.append([total_duration, V_train[0][1]])
+
+
     for clip in V_train[1:len(V_train)]:
         sound = AudioSegment.from_wav(clip[0])  # Index into the tuple to  get the filename
 
@@ -133,7 +141,7 @@ def Random_Random(v1, v2, audio):
 
     # Export The Wav files
 
-    V_Train_Wav.export(os.path.join('.', "SimInput", "V_Train.wav"))
+    V_Train_Wav.export(os.path.join('.', "SimInput", "V_train.wav"))
 
     V_Test_Wav.export(os.path.join('.', "SimInput", "V_test.wav"))
 
