@@ -1,7 +1,6 @@
 import sys
 import os
 from pydub import AudioSegment
-
 from random import shuffle, sample
 import math
 import pickle
@@ -39,30 +38,8 @@ def Random_Random(v1, v2, audio):
     V2_trainLen = math.ceil(len(V2) * Train_Split_Percent)
     V2_testLen = len(V2) - V2_trainLen
 
-
-    print("V1")
-    print(len(V1))
-    print("V1 train")
-    print(V1_trainLen)
-    print("V1 test")
-    print(V1_testLen)
-
-
-    print("V2")
-    print(len(V2))
-    print("V2 train")
-    print(V2_trainLen)
-    print("V2 test")
-    print(V1_testLen)
-
     ############################################################################
     # Create V_Train Wav file
-
-    print("V1 Train Part:")
-    print(len(V1[0:V1_trainLen-1]))
-
-    print("V2 Train Part:")
-    print(len(V2[0:V2_trainLen-1]))
 
 
     # I will linearly index from here b/c the samples are randomized already.
@@ -99,10 +76,6 @@ def Random_Random(v1, v2, audio):
 
     print("Len of VTrain:")
     print(len(V_train))
-
-    print("Testing the output timing")
-    for row in outputPattern:
-        print(row)
 
     # Generate Output Labels
     GenerateLabels(outputPattern)
@@ -159,54 +132,56 @@ def Random_Random(v1, v2, audio):
     return data
 
 
+def main():
+
+    Title = """
+                        _ _          _____                           _
+         /\            | (_)        / ____|                         | |
+        /  \  _   _  __| |_  ___   | |  __  ___ _ __   ___ _ __ __ _| |_ ___  _ __
+       / /\ \| | | |/ _` | |/ _ \  | | |_ |/ _ \ '_ \ / _ \ '__/ _` | __/ _ \| '__|
+      / ____ \ |_| | (_| | | (_) | | |__| |  __/ | | |  __/ | | (_| | || (_) | |
+     /_/    \_\__,_|\__,_|_|\___/   \_____|\___|_| |_|\___|_|  \__,_|\__\___/|_|
 
 
-Title = """
-                    _ _          _____                           _
-     /\            | (_)        / ____|                         | |
-    /  \  _   _  __| |_  ___   | |  __  ___ _ __   ___ _ __ __ _| |_ ___  _ __
-   / /\ \| | | |/ _` | |/ _ \  | | |_ |/ _ \ '_ \ / _ \ '__/ _` | __/ _ \| '__|
-  / ____ \ |_| | (_| | | (_) | | |__| |  __/ | | |  __/ | | (_| | || (_) | |
- /_/    \_\__,_|\__,_|_|\___/   \_____|\___|_| |_|\___|_|  \__,_|\__\___/|_|
+    Enter a Train/Test configuration:
+    (1) Random / Random
+    (2) Segments / Random (In Development)
+    (3) Segments / Segments (In Development)
+    """
+    print(Title)
+
+    InputChecker = False
+
+    while(not(InputChecker)):
+        mode = int(input("Your Selection: \n"))
+
+        if mode == 1 or mode == 2 or mode == 3:
+            InputChecker = True
+        else:
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print(Title)
+            print("Please enter a valid option.")
 
 
-Enter a Train/Test configuration:
-(1) Random / Random
-(2) Segments / Random (In Development)
-(3) Segments / Segments (In Development)
-"""
-print(Title)
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    AudioFolder = os.path.join(dir_path, 'Audio')
 
-InputChecker = False
+    print("Available Audio Data Folder Names:")
+    for x in os.walk(AudioFolder):
+        if x[0] != AudioFolder:
+            print(x[0].replace(AudioFolder,""))
 
-while(not(InputChecker)):
-    mode = int(input("Your Selection: \n"))
+    print("Please pick the two voices you would like to differentiate:")
 
-    if mode == 1 or mode == 2 or mode == 3:
-        InputChecker = True
-    else:
-        os.system('cls' if os.name == 'nt' else 'clear')
-        print(Title)
-        print("Please enter a valid option.")
+    V1 = input("Voice 1: ")
+    V2 = input("Voice 2: ")
 
+    if mode == 1:
+        Random_Random(V1,V2, AudioFolder)
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-AudioFolder = os.path.join(dir_path, 'Audio')
+    elif mode == 2:
+        print("hi")
+    elif mode == 3:
+        print("hi")
 
-print("Available Audio Data Folder Names:")
-for x in os.walk(AudioFolder):
-    if x[0] != AudioFolder:
-        print(x[0].replace(AudioFolder,""))
-
-print("Please pick the two voices you would like to differentiate:")
-
-V1 = input("Voice 1: ")
-V2 = input("Voice 2: ")
-
-if mode == 1:
-    Random_Random(V1,V2, AudioFolder)
-
-elif mode == 2:
-    print("hi")
-elif mode == 3:
-    print("hi")
+main()

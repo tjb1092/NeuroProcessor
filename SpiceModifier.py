@@ -32,6 +32,7 @@ def GenerateLabels(outputPattern):
 
         source_counter += 1
 
+    # Write out newly modified file into the main directory
     voltage_element_fn = fname = os.path.join(dir_path, 'OutputLabels.asc')
 
     data_file = open(voltage_element_fn, "w")
