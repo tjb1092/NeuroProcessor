@@ -9,8 +9,9 @@ def GenerateLabels(outputPattern):
         content = f.readlines()
 
     # Hard coded indicies to the PWL commands
-    IndexList =[46, 52, 59, 64, 70, 76, 82, 88]
+    IndexList =[46, 52, 58, 64, 70, 76, 82, 88]
 
+    #These can change to whatever. They are in Volts.
     labelPattern =[[1,5,1,5,1,5,1,5],
                    [4,2,4,2,4,2,4,2]]
 
@@ -27,8 +28,6 @@ def GenerateLabels(outputPattern):
             newString += " " + "{0:.3f}".format(row[0]) + " " + str(pattern)
 
         newString += ")\n"
-        print(newString)
-
         content[index] = newString #Override template w/ new command
 
         source_counter += 1
