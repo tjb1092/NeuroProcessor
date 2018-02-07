@@ -114,9 +114,9 @@ def Random_Random(v1, v2, audio):
 
     # Export The Wav files
 
-    V_Train_Wav.export(os.path.join('.', "SimInput", "V_train.wav"))
+    V_Train_Wav.export(os.path.join('.', "SimInput", "V_train.wav"), format="wav")
 
-    V_Test_Wav.export(os.path.join('.', "SimInput", "V_test.wav"))
+    V_Test_Wav.export(os.path.join('.', "SimInput", "V_test.wav"), format="wav")
 
     data = {"Train": V_train, "Test": V_test}
     pickle.dump( data, open( os.path.join('.', "SimInput", "data_info.p"), "wb" ) )
