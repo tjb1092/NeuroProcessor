@@ -5,7 +5,7 @@ from random import shuffle, sample
 import math
 import pickle
 from SpiceModifier import GenerateLabels
-
+from FindVoiceTiming import voiceTimings
 def Random_Random(v1, v2, audio):
     Train_Split_Percent = 0.8
 
@@ -51,22 +51,55 @@ def Random_Random(v1, v2, audio):
     outputPattern = [[0.0,0]] # Start "off"
 
 
+    """
+    For each audio file:
+    assume it is 0V beforehand.
+    start:
+    voice start:
+    total_duration + v_start
+    total_duration + v_start+ 0.01
+
+    voice end:
+    total_duration + v_end
+    total_duration + v_end+ 0.01
+
+    end:
+    new_total_duration
+    """
     # Dummy one to instantiate object. Maybe it can be constructed w/o an input,
     # but I don't think it is likely without changing the code.
+
+
+
+    Timings = voiceTimings(V_train[0][0])  # Analyze voice data to find start (0) and end (1) timing
+
     V_Train_Wav = AudioSegment.from_wav(V_train[0][0])
 
-    outputPattern.append([total_duration+.01, V_train[0][1]])  # Add +0.01 to that you get an effective step function.
-    total_duration += V_Train_Wav.duration_seconds
-    outputPattern.append([total_duration, V_train[0][1]])
+    outputPattern.append([total_duration+Timings[0], 0])  # Voice starts
+    outputPattern.append([total_duration+Timings[0]+.01, V_train[0][1]])  # Add +0.01 to that you get an effective step function.
 
+    outputPattern.append([total_duration+Timings[1], V_train[0][1]])  # Voice ends
+    outputPattern.append([total_duration+Timings[1]+.01, 0])  # Add +0.01 to that you get an effective step function.
+
+    # Find duration of audio sample. make end a 0 to ensure next sample start 0.
+    total_duration += V_Train_Wav.duration_seconds
+    outputPattern.append([total_duration, 0])
+
+    input("pause")
 
     for clip in V_train[1:len(V_train)]:
+        Timings = voiceTimings(clip[0])  # Analyze voice data to find start (0) and end (1) timing
         sound = AudioSegment.from_wav(clip[0])  # Index into the tuple to  get the filename
 
-        outputPattern.append([total_duration+.01, clip[1]])  # Add +0.01 to that you get an effective step function.
+        outputPattern.append([total_duration+Timings[0], 0])  # Voice starts
+        outputPattern.append([total_duration+Timings[0]+.01, clip[1]])  # Add +0.01 to that you get an effective step function.
 
+        outputPattern.append([total_duration+Timings[1], clip[1]])  # Voice ends
+        outputPattern.append([total_duration+Timings[1]+.01, 0])  # Add +0.01 to that you get an effective step function.
+
+        # Find duration of audio sample. make end a 0 to ensure next sample start 0.
         total_duration += sound.duration_seconds
-        outputPattern.append([total_duration, clip[1]])
+        outputPattern.append([total_duration, 0])
 
         V_Train_Wav = V_Train_Wav + sound
 
@@ -114,9 +147,9 @@ def Random_Random(v1, v2, audio):
 
     # Export The Wav files
 
-    V_Train_Wav.export(os.path.join('.', "SimInput", "V_train.wav"), format="wav")
+    V_Train_Wav.export(os.path.join('.', "V_train.wav"), format="wav")
 
-    V_Test_Wav.export(os.path.join('.', "SimInput", "V_test.wav"), format="wav")
+    V_Test_Wav.export(os.path.join('.', "V_test.wav"), format="wav")
 
     data = {"Train": V_train, "Test": V_test}
     pickle.dump( data, open( os.path.join('.', "SimInput", "data_info.p"), "wb" ) )

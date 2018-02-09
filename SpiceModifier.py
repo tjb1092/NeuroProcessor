@@ -1,6 +1,11 @@
 import os
 
 def GenerateLabels(outputPattern):
+
+    for row in outputPattern:
+        print(row)
+
+    input("pause")    
     dir_path = os.path.dirname(os.path.realpath(__file__))
     fname = os.path.join(dir_path, 'SimInput','Template.asc')
 
