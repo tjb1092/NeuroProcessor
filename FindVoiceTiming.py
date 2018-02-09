@@ -20,13 +20,13 @@ def voiceTimings(filename):
     v_end = 0
 
     # Window Params:
-    avgWindow = 70
+    avgWindow = 50
     start_thresh = 100.0
     end_thresh = 10.0
     # Get a moving average of 50 samples.
-    for i in range(int(avgWindow/2)-1,len(data)):
+    for i in range(int(avgWindow)-1,len(data)):
         # Use numpy slicing to calculate moving average
-        movingAvg = sum(abs(data[(i-int(avgWindow/2)): (i+int(avgWindow/2)),0])) / avgWindow
+        movingAvg = sum(abs(data[(i-int(avgWindow)): i,0])) / avgWindow
 
         # At the first instance where the signal is greater than the thresh,
         # Say that the voice has started
