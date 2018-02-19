@@ -9,8 +9,8 @@ def voiceTimings(filename):
     data = wavData[1]
     sampleRate = wavData[0]
 
-    print("Length of data: {}".format(len(data)))
-    print("Duration (s): {0:.2f}".format(len(data)/sampleRate))
+    #print("Length of data: {}".format(len(data)))
+    #print("Duration (s): {0:.2f}".format(len(data)/sampleRate))
 
 
     # Initialize flags and data
@@ -32,14 +32,14 @@ def voiceTimings(filename):
         # Say that the voice has started
         if movingAvg > start_thresh and not risingEdge:
             v_start = i / sampleRate
-            print("voice starts: {0:.2f} sec".format(v_start))
+            #print("voice starts: {0:.2f} sec".format(v_start))
             risingEdge = True
 
         # At the first instance where the signal is less than the thresh,
         # Say that the voice has ended
         if risingEdge and movingAvg < end_thresh and not fallingEdge and ((i/sampleRate) > v_start+0.3):
             v_end = i/sampleRate
-            print("voice ends: {0:.2f} sec".format(v_end))
+            #print("voice ends: {0:.2f} sec".format(v_end))
             fallingEdge = True
 
     if v_start == 0 or v_end == 0:
