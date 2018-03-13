@@ -2,10 +2,10 @@ import os
 
 def GenerateLabels(outputPattern):
 
-    for row in outputPattern:
-        print(row)
+    #for row in outputPattern:
+    #    print(row)
 
-    input("pause")    
+    #input("pause")
     dir_path = os.path.dirname(os.path.realpath(__file__))
     fname = os.path.join(dir_path, 'SimInput','Template.asc')
 
@@ -17,8 +17,8 @@ def GenerateLabels(outputPattern):
     IndexList =[46, 52, 58, 64, 70, 76, 82, 88]
 
     #These can change to whatever. They are in Volts.
-    labelPattern =[[1,5,1,5,1,5,1,5],
-                   [4,2,4,2,4,2,4,2]]
+    labelPattern =[[0,3,0,3,0,3,0,3],
+                   [0,0,0,0,0,0,0,0]]
 
     source_counter = 0
     for index in IndexList:
