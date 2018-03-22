@@ -17,8 +17,8 @@ def GenerateLabels(outputPattern):
     IndexList =[46, 52, 58, 64, 70, 76, 82, 88]
 
     #These can change to whatever. They are in Volts.
-    labelPattern =[[0,3,0,3,0,3,0,3],
-                   [0,0,0,0,0,0,0,0]]
+    labelPattern =[[3,0,3,0,3,0,3,0],
+                   [0,3,0,3,0,3,0,3]]
 
     source_counter = 0
     for index in IndexList:
