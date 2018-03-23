@@ -4,7 +4,7 @@ from pydub import AudioSegment
 from random import shuffle, sample
 import math
 import pickle
-from TestStruct import Random_Random, SingleV, Alternating_Random
+from TestStruct import MultiV, SingleV
 from utils import GetUserInput
 
 
@@ -20,8 +20,8 @@ def main():
 
 
     Enter a Train/Test configuration:
-    (1) Random / Random
-    (2) Single Voice Randomized
+    (1) Single Voice Randomized
+    (2) Random / Random
     (3) Alternating / Random
     (4) Alternating / Alternating
     """
@@ -53,17 +53,16 @@ def main():
     print("Please pick the voice(s) you would like to differentiate:")
 
     V1 = input("Voice 1: ")
-    if mode != 2:
+    if mode != 1:
         V2 = input("Voice 2: ")
 
     # X/Y implementation a bit off, but again, it should be okay.
     if mode == 1:
-        Random_Random(V1,V2, AudioFolder, TTS)
-    elif mode == 2:
         SingleV(V1, AudioFolder, TTS)
+    elif mode == 2:
+        MultiV(V1,V2, AudioFolder, TTS, 0,0)
     elif mode == 3:
-        Alternating_Random(V1, V2, AudioFolder, TTS)
+        MultiV(V1, V2, AudioFolder, TTS, 1,0)
     elif mode == 4:
-        print("hi")
-
+        MultiV(V1, V2, AudioFolder, TTS, 1,1)
 main()
