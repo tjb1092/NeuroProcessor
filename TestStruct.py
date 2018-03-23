@@ -25,7 +25,7 @@ def Random_Random(v1, v2, audio, Train_Test_Split):
     shuffle(V_test)
     genVTest(V_test, silence)
 
-    data = dataPickle(V_train, V_test)
+    data = dataPickle(V_train, V_test, len(audio)+1)
     printSuccess()
     return data
 
@@ -42,7 +42,7 @@ def SingleV(v1, audio, Train_Test_Split):
     shuffle(V_test)
     genVTest(V_test, silence)
 
-    data = dataPickle(V_train, V_test)
+    data = dataPickle(V_train, V_test, len(audio)+1)
     printSuccess()
     return data
 
@@ -79,6 +79,6 @@ def Alternating_Random(v1, v2, audio, Train_Test_Split):
     shuffle(V_test)
     genVTest(V_test, silence)
 
-    data = dataPickle(V_train, V_test)
+    data = dataPickle(V_train, V_test, len(audio)+1)
     printSuccess()
     return data

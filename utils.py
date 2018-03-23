@@ -42,8 +42,14 @@ def printSuccess():
     print(Success)
 
 
-def dataPickle(V_train, V_test):
+def dataPickle(V_train, V_test, index):
     # Store data into pickle file for later if needed.
+    for i in range(len(V_train)):
+        V_train[i] = (V_train[i][0][index:-4])
+
+    for i in range(len(V_test)):
+        V_test[i] = (V_test[i][0][index:-4])
+
     data = {"Train": V_train, "Test": V_test}
     pickle.dump( data, open( os.path.join('.', "SimInput", "data_info.p"), "wb" ) )
     return data
