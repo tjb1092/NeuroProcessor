@@ -15,7 +15,8 @@ LINE Normal -32 23 -27 16
 LINE Normal 27 23 32 16
 LINE Normal 37 23 27 23
 LINE Normal 32 16 37 23
-LINE Normal -80 0 -48 0
+LINE Normal -80 -16 -48 -16
+LINE Normal -80 16 -48 16
 RECTANGLE Normal 48 32 -48 -32
 WINDOW 0 19 -63 Left 2
 PIN 0 -64 NONE 8
@@ -27,6 +28,9 @@ PINATTR SpiceOrder 2
 PIN 32 64 NONE 8
 PINATTR PinName NeuronOUT
 PINATTR SpiceOrder 3
-PIN -80 0 NONE 8
+PIN -80 -16 NONE 8
 PINATTR PinName Label
 PINATTR SpiceOrder 4
+PIN -80 16 NONE 8
+PINATTR PinName Label2
+PINATTR SpiceOrder 5
