@@ -37,12 +37,14 @@ def MultiV(v1, v2, audio, Train_Test_Split,Train_Mode,Test_Mode):
     silence = genVTrain(V_train)
 
     if Test_Mode == 1:
-        # Cheeky little index alternator
+
         if Train_Mode != 1:
+            # If the mode is 1, then the indicies already exist and
+            #have the correct value.
             V1_index = V1_trainLen
             V2_index = V2_trainLen
 
-
+        # Cheeky little index alternator
         V_test = []
         #Note this won't work for % based splits b/c its only one value
         for index in range(int(Train_Test_Split[1])):
@@ -57,7 +59,6 @@ def MultiV(v1, v2, audio, Train_Test_Split,Train_Mode,Test_Mode):
         # I will linearly index from here b/c the samples are randomized already.
         V_test= V1[V1_trainLen:V1_trainLen+V1_testLen] + V2[V2_trainLen:V2_trainLen+V2_testLen]
         shuffle(V_test)
-
 
     genVTest(V_test, silence)
 
