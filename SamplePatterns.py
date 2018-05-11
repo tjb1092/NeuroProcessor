@@ -11,12 +11,13 @@ troubleshoot particular sample numbers. Outputs response to a terminal.
 data = pickle.load(open( os.path.join('.', "SimInput", "data_info.p"), "rb" ) )
 os.system('cls' if os.name == 'nt' else 'clear')
 
+
 output = "\n \n"
 for sample in data["Train"]:
-    output = output + "|" + sample[0][44:-4]
+    output = output + "|" + sample
 output = output + "|-"
 
 for sample in data["Test"]:
-    output = output + "|" + sample[0][44:-4]
+    output = output + "|" + sample
 
 print(output + "|\n \n")
