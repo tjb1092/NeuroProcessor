@@ -56,7 +56,7 @@ def main():
     if mode != 1:
         V2 = input("Voice 2: ")
 
-    # X/Y implementation a bit off, but again, it should be okay.
+    # X/Y implementation a bit off, but it should be okay.
     if mode == 1:
         SingleV(V1, AudioFolder, TTS)
     elif mode == 2:

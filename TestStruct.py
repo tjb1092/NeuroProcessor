@@ -44,7 +44,7 @@ def MultiV(v1, v2, audio, Train_Test_Split,Train_Mode,Test_Mode):
             V1_index = V1_trainLen
             V2_index = V2_trainLen
 
-        # Cheeky little index alternator
+        # Cheeky little index alternator. Yes it can be functionalized, but its pretty short.
         V_test = []
         #Note this won't work for % based splits b/c its only one value
         for index in range(int(Train_Test_Split[1])):

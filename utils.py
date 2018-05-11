@@ -165,7 +165,7 @@ def GetUserInput(Text):
     while(not(InputChecker)):
         choice = int(input("Your Selection: \n"))
 
-        # Kinda a crappy cop-out for now. should work in 7/9 cases currently Good nuf.
+        # Kinda a bad cop-out for now. should work in 7/9 cases currently. Good enough.
         # Upgrade would be an expansive if statement based on how many choices correspond to each text option.
         if choice == 1 or choice == 2 or choice == 3 or choice == 4:
             InputChecker = True

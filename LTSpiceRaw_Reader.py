@@ -13,8 +13,8 @@
 
 """ A pure python implementation of an LTSpice RAW file reader.
 The reader returns a class containing all the traces read from the RAW File.
-In case there there stepped data detected, it will try to open the simulation LOG file and
-read the stepping information.
+In case there there stepped data detected, it will try to open the simulation
+LOG file and read the stepping information.
 
 Traces are accessible by the method <LTSpiceReader instance>.get_trace(trace_ref) where trace_ref is either
 the name of the net on the LTSPice Simulation. Normally trace references are stored with the format V(<node_name>)
@@ -260,11 +260,11 @@ class LTSpiceRawRead(object):
         self._traces = []
         self.steps = None
         self.axis = None  # Creating the axis
-        # print("Reading Variables")
+
 
         for ivar in range(self.nVariables):
             line = raw_file.readline().decode()[:-1]
-            # print(line)
+
             dummy, n, name, var_type = line.split("\t")
             if ivar == 0 and self.nVariables > 1:
                 self.axis = Axis(name, var_type, self.nPoints)
@@ -387,7 +387,6 @@ class LTSpiceRawRead(object):
         if isinstance(trace_ref, str):
             for trace in self._traces:
                 if trace_ref == trace.name:
-                    # assert isinstance(trace, DataSet)
                     return trace
             return None
         else:
@@ -455,13 +454,10 @@ if __name__ == "__main__":
         raw_filename = sys.argv[1]
     else:
         raw_filename = "CSL2_kevin_Test.raw"
-        # raw_filename = "teste.raw"
 
     LTR = LTSpiceRawRead(raw_filename,'V(out)')
 
     print(LTR.get_trace_names())
-    # for trace in LTR.get_trace_names():
-    #     print(LTR.get_trace(trace))
 
     print(LTR.get_raw_property())
 
@@ -469,17 +465,7 @@ if __name__ == "__main__":
     x = LTR.get_trace(0)  # Zero is always the X axis
     steps = LTR.get_steps(ana=4.0)
     for step in steps:
-        # print(steps[step])
         plt.plot(x.get_wave(step), y.get_wave(step), label=LTR.steps[step])
 
     plt.legend()  # order a legend.
     plt.show()
-
-
-
-    # out = open("RAW_TEST_out_test1.txt", 'w')
-    #
-    # for step in LTR.get_steps():
-    #     for x in range(len(LTR[0].data)):
-    #         out.write("%s, %e, %e\n" % (step, LTR[0].data[x], LTR[2].data[x]))
-    # out.close()

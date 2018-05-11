@@ -2,21 +2,17 @@ import os
 
 def GenerateLabels(outputPattern):
 
-    #for row in outputPattern:
-    #    print(row)
-
-    #input("pause")
     dir_path = os.path.dirname(os.path.realpath(__file__))
     fname = os.path.join(dir_path, 'SimInput','Template.asc')
 
-    # Open Template & read into list
+    # Open Template Circuit & read into list
     with open(fname) as f:
         content = f.readlines()
 
     # Hard coded indicies to the PWL commands
     IndexList =[46, 52, 58, 64, 70, 76, 82, 88]
 
-    #These can change to whatever. They are in Volts.
+    #These can change to whatever is needed. They are in Volts.
     labelPattern =[[3,0,3,0,3,0,3,0],
                    [0,3,0,3,0,3,0,3]]
 
