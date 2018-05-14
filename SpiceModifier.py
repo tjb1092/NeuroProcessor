@@ -1,6 +1,6 @@
 import os
 
-def GenerateLabels(outputPattern):
+def GenerateLabels(outputPattern, folderName):
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     fname = os.path.join(dir_path, 'SimInput','Template.asc')
@@ -34,7 +34,7 @@ def GenerateLabels(outputPattern):
         source_counter += 1
 
     # Write out newly modified file into the main directory
-    voltage_element_fn = fname = os.path.join(dir_path, 'OutputLabels.asc')
+    voltage_element_fn = fname = os.path.join(dir_path,'SimInput', folderName, 'OutputLabels.asc')
 
     data_file = open(voltage_element_fn, "w")
     for line in content:

@@ -5,8 +5,12 @@ from random import shuffle, sample
 import math
 import pickle
 from utils import getV, printSuccess, dataPickle, genVTest, genVTrain
+from subprocess import call
+
 
 def MultiV(v1, v2, audio, Train_Test_Split,Train_Mode,Test_Mode):
+    #A = "SimInput/"+v1+v2
+    call(["mkdir", "SimInput/"+v1+v2]) # Make output folder for future writing
 
     # Get list of V1 files & create list data structure
     V1, V1_trainLen, V1_testLen = getV(v1, audio, Train_Test_Split, 1)
@@ -34,7 +38,7 @@ def MultiV(v1, v2, audio, Train_Test_Split,Train_Mode,Test_Mode):
         V_train = V1[0:V1_trainLen] + V2[0:V2_trainLen]
         shuffle(V_train)
 
-    silence = genVTrain(V_train)
+    silence = genVTrain(V_train, v1+v2)
 
     if Test_Mode == 1:
 
@@ -60,25 +64,28 @@ def MultiV(v1, v2, audio, Train_Test_Split,Train_Mode,Test_Mode):
         V_test= V1[V1_trainLen:V1_trainLen+V1_testLen] + V2[V2_trainLen:V2_trainLen+V2_testLen]
         shuffle(V_test)
 
-    genVTest(V_test, silence)
+    genVTest(V_test, silence, v1+v2)
 
-    data = dataPickle(V_train, V_test, len(audio)+1)
+    data = dataPickle(V_train, V_test, v1+v2, len(audio)+1)
     printSuccess()
     return data
 
 def SingleV(v1, audio, Train_Test_Split):
+
+    call(["mkdir", "SimInput/"+v1]) # Make output folder for future writing
+
     # Get list of V1 files & create list data structure
     V1, V1_trainLen, V1_testLen = getV(v1, audio, Train_Test_Split, 1)
     # Create V_Train Wav file
     V_train = V1[0:V1_trainLen]
     shuffle(V_train)
-    silence = genVTrain(V_train)
+    silence = genVTrain(V_train, v1)
 
     # Create V_Test Wav file
     V_test= V1[V1_trainLen:V1_trainLen+V1_testLen]
     shuffle(V_test)
-    genVTest(V_test, silence)
+    genVTest(V_test, silence, v1)
 
-    data = dataPickle(V_train, V_test, len(audio)+1)
+    data = dataPickle(V_train, V_test, v1, len(audio)+1)
     printSuccess()
     return data

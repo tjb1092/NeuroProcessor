@@ -24,6 +24,9 @@ def main():
     (2) Random / Random
     (3) Alternating / Random
     (4) Alternating / Alternating
+
+    Extra Functionality:
+    (5) View a generated sequence order
     """
 
     mode = GetUserInput(Title)
@@ -45,24 +48,59 @@ def main():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     AudioFolder = os.path.join(dir_path, 'Audio')
 
-    print("Available Audio Data Folder Names:")
-    for x in os.walk(AudioFolder):
-        if x[0] != AudioFolder:
-            print(x[0].replace(AudioFolder,""))
+    typeDialog ="""
+Permute over all voice pairs?:
+(1) Yes
+(2) No
+    """
+    isPermute = GetUserInput(typeDialog)
 
-    print("Please pick the voice(s) you would like to differentiate:")
+    if(isPermute):
+        # X/Y implementation a bit off, but it should be okay.
+        if mode == 1:
+            for x in os.walk(AudioFolder):
+                if x[0] != AudioFolder:
+                    V1 = x[0].replace(AudioFolder, "")[1:]
+                    SingleV(V1, AudioFolder, TTS)
+        else:
 
-    V1 = input("Voice 1: ")
-    if mode != 1:
-        V2 = input("Voice 2: ")
+            AudioLst = []
+            for x in os.walk(AudioFolder):
+                if x[0] != AudioFolder:
+                    AudioLst.append(x[0].replace(AudioFolder, "")[1:])  #Figure out how many voices there are
 
-    # X/Y implementation a bit off, but it should be okay.
-    if mode == 1:
-        SingleV(V1, AudioFolder, TTS)
-    elif mode == 2:
-        MultiV(V1,V2, AudioFolder, TTS, 0,0)
-    elif mode == 3:
-        MultiV(V1, V2, AudioFolder, TTS, 1,0)
-    elif mode == 4:
-        MultiV(V1, V2, AudioFolder, TTS, 1,1)
+            # Go through each combination
+            for V1 in range(len(AudioLst)):
+                for V2 in range(V1+1,len(AudioLst)):
+                    print(V1)
+                    print(V2)
+                    print("\n")
+                    if mode == 2:
+                        MultiV(AudioLst[V1],AudioLst[V2], AudioFolder, TTS, 0,0)
+                    elif mode == 3:
+                        MultiV(AudioLst[V1],AudioLst[V2], AudioFolder, TTS, 1,0)
+                    elif mode == 4:
+                        MultiV(AudioLst[V1],AudioLst[V2], AudioFolder, TTS, 1,1)
+    else:
+        # Manually pick the voices
+        print("Available Audio Data Folder Names:")
+        for x in os.walk(AudioFolder):
+            if x[0] != AudioFolder:
+                print(x[0].replace(AudioFolder,"")[1:])
+
+        print("Please pick the voice(s) you would like to differentiate:")
+
+        V1 = input("Voice 1: ")
+        if mode != 1:
+            V2 = input("Voice 2: ")
+
+        if mode == 1:
+            SingleV(V1, AudioFolder, TTS)
+        elif mode == 2:
+            MultiV(V1,V2, AudioFolder, TTS, 0,0)
+        elif mode == 3:
+            MultiV(V1, V2, AudioFolder, TTS, 1,0)
+        elif mode == 4:
+            MultiV(V1, V2, AudioFolder, TTS, 1,1)
+
 main()

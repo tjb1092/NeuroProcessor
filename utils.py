@@ -42,7 +42,7 @@ def printSuccess():
     print(Success)
 
 
-def dataPickle(V_train, V_test, index):
+def dataPickle(V_train, V_test, folderName, index):
     # Store data into pickle file for later if needed.
     for i in range(len(V_train)):
         V_train[i] = (V_train[i][0][index:-4])
@@ -51,11 +51,11 @@ def dataPickle(V_train, V_test, index):
         V_test[i] = (V_test[i][0][index:-4])
 
     data = {"Train": V_train, "Test": V_test}
-    pickle.dump( data, open( os.path.join('.', "SimInput", "data_info.p"), "wb" ) )
+    pickle.dump( data, open( os.path.join('.', "SimInput", folderName, "data_info.p"), "wb" ) )
     return data
 
 
-def genVTest(V_test, silence):
+def genVTest(V_test, silence,folderName):
     ############################################################################
     # Create V_Test Wav file
 
@@ -80,11 +80,12 @@ def genVTest(V_test, silence):
     print(len(V_test))
 
     # Export The Wav file
-    V_Test_Wav.export(os.path.join('.', "V_test.wav"), format="wav")
+    V_Test_Wav.export(os.path.join('.', "SimInput", folderName, "V_test.wav"), format="wav")
 
 
 
-def genVTrain(V_train):
+
+def genVTrain(V_train,folderName):
 
     #Init output label info.
     total_duration = 0.0
@@ -146,14 +147,13 @@ def genVTrain(V_train):
     print(len(V_train))
 
     # Generate Output Labels
-    GenerateLabels(outputPattern)
+    GenerateLabels(outputPattern, folderName)
 
 
     silence = V_Train_Wav - 100  # Creates hopefully a file that is basically silent. -100dB might be overkill
 
     # Export The Wav files
-    V_Train_Wav.export(os.path.join('.', "V_train.wav"), format="wav")
-
+    V_Train_Wav.export(os.path.join('.', "SimInput", folderName, "V_train.wav"), format="wav")
     return silence
 
 
