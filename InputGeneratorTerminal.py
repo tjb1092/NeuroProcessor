@@ -7,6 +7,8 @@ import pickle
 from TestStruct import MultiV, SingleV
 from utils import GetUserInput
 from SamplePatterns import samplePattern
+from FFT_Analysis import FFT_plot
+
 
 def main():
 
@@ -27,10 +29,12 @@ def main():
 
     Extra Functionality:
     (5) View a generated sequence order
+    (6) FFT analysis of audio
     """
 
     mode = GetUserInput(Title)
     dir_path = os.path.dirname(os.path.realpath(__file__))
+    AudioFolder = os.path.join(dir_path, 'Audio')
     if mode == 5:
 
         DataFolder = os.path.join(dir_path, 'SimInput')
@@ -41,6 +45,40 @@ def main():
 
         V_file = input("Choose a name: ")
         samplePattern(V_file)
+    elif mode == 6:
+        typeDialog ="""
+Permute over all voice pairs?:
+(1) Yes
+(2) No
+        """
+        isPermute = GetUserInput(typeDialog)
+        FullAudioFolder = os.path.join(dir_path,"FullAudio")
+        if(isPermute == 1):
+            #Doing this second
+            AudioLst = []
+            for x in os.walk(FullAudioFolder):
+                if x[0] != FullAudioFolder:
+                    V = x[0].replace(FullAudioFolder, "")[1:]
+                    if (not(V == "NormalizationTest" or V == "Tony")):
+
+                        vfile = os.path.join(x[0], V+"_Normalized_NoiseReduced.wav")
+                        AudioLst.append(vfile)
+            FFT_plot(AudioLst)
+
+        else:
+            # Manually pick the voices
+            print("Available Audio Data Folder Names:")
+            for x in os.walk(AudioFolder):
+                if x[0] != AudioFolder:
+                    print(x[0].replace(AudioFolder,"")[1:])
+
+            print("Please pick the voice you would like to take the FFT of:")
+
+            V = input("Voice: ")
+            vfile = os.path.join(dir_path,"FullAudio", V, V+"_Normalized_NoiseReduced.wav")
+            print(vfile)
+            FFT_plot(vfile)
+
     else:
 
         typeDialog ="""
@@ -57,8 +95,6 @@ def main():
             X = input("Please enter X: \n")
             Y = input("Please enter Y: \n")
             TTS = [X,Y]
-        AudioFolder = os.path.join(dir_path, 'Audio')
-
         typeDialog ="""
         Permute over all voice pairs?:
         (1) Yes
@@ -66,7 +102,7 @@ def main():
         """
         isPermute = GetUserInput(typeDialog)
 
-        if(isPermute):
+        if(isPermute == 1):
             # X/Y implementation a bit off, but it should be okay.
             if mode == 1:
                 for x in os.walk(AudioFolder):

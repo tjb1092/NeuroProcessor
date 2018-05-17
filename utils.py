@@ -167,7 +167,7 @@ def GetUserInput(Text):
 
         # Kinda a bad cop-out for now. should work in 7/9 cases currently. Good enough.
         # Upgrade would be an expansive if statement based on how many choices correspond to each text option.
-        if choice == 1 or choice == 2 or choice == 3 or choice == 4 or choice == 5:
+        if choice == 1 or choice == 2 or choice == 3 or choice == 4 or choice == 5 or choice ==6:
             InputChecker = True
         else:
             os.system('cls' if os.name == 'nt' else 'clear')

@@ -15,7 +15,8 @@ def samplePattern(folderName):
     output = "\n \n"
     for sample in data["Train"]:
         output = output + "|" + sample
-        output = output + "|-"
+
+    output = output + "|-"
 
     for sample in data["Test"]:
         output = output + "|" + sample
