@@ -9,7 +9,13 @@ from utils import GetUserInput
 from SamplePatterns import samplePattern
 from FFT_Analysis import FFT_plot
 
-
+"""
+Here's an interesting idea: If we want to fuck around with the filter params a lot
+it will get real tedious really fast. We could make a filter bank template like
+the output labels and make it so that we input filter bands and it creates the
+resistor and capacitor elements. It could also store profiles of good ones in
+pickle files.
+"""
 def main():
 
     Title = """
@@ -82,9 +88,9 @@ Permute over all voice pairs?:
     else:
 
         typeDialog ="""
-        Train-Test-Split Type:
-        (1) X/100-X \% split Train/Test
-        (2) X/Y samples Train/Test
+Train-Test-Split Type:
+(1) X/100-X \% split Train/Test
+(2) X/Y samples Train/Test
         """
         TTStype = GetUserInput(typeDialog)
 
@@ -96,9 +102,9 @@ Permute over all voice pairs?:
             Y = input("Please enter Y: \n")
             TTS = [X,Y]
         typeDialog ="""
-        Permute over all voice pairs?:
-        (1) Yes
-        (2) No
+Permute over all voice pairs?:
+(1) Yes
+W(2) No
         """
         isPermute = GetUserInput(typeDialog)
 

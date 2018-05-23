@@ -9,7 +9,7 @@ from utils import GetUserInput
 import os
 import subprocess
 import pickle
-
+from SPICE_Raw_UnicodeFix import fix_bytes
 
 def DataLoader():
 
@@ -127,7 +127,7 @@ def main():
     Determines how long the animations runs for and can be tuned to approx.
     "real-time" for demonstration purposes.
     """
-    SkipFactor = 250
+    SkipFactor = 500
 
 
     Title = """
@@ -143,7 +143,7 @@ def main():
 
     os.system('cls' if os.name == 'nt' else 'clear')
     print(Title)
-
+    fix_bytes("Net Array_Small.raw")
     CompleteGIF(SkipFactor)
 
 main()

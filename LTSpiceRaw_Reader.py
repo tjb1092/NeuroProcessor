@@ -13,19 +13,15 @@
 
 """ A pure python implementation of an LTSpice RAW file reader.
 The reader returns a class containing all the traces read from the RAW File.
-In case there there stepped data detected, it will try to open the simulation
-LOG file and read the stepping information.
-
+In case there there stepped data detected, it will try to open the simulation LOG file and
+read the stepping information.
 Traces are accessible by the method <LTSpiceReader instance>.get_trace(trace_ref) where trace_ref is either
 the name of the net on the LTSPice Simulation. Normally trace references are stored with the format V(<node_name>)
 for voltages or I(device_reference). For example V(n001) or I(R1) or Ib(Q1).
-
 For checking step, the method <LTSpiceReader instance>.get_steps() is used. In case there are no steps in the simulation,
 the class will return a single element list.
-
 NOTE: This module tries to import the numpy if exists on the system.
 If it finds numpy all data is later provided as an array. If not it will use a standard list of floats.
-
 """
 
 __author__ = "Nuno Canto Brum <nuno.brum@gmail.com>"
@@ -58,7 +54,6 @@ class DataSet(object):
 
     def set_pointA(self, n, value):
         """function to be used on ASCII RAW Files.
-
         :param n:     the point to set
         :param value: the Value of the point being set."""
         assert isinstance(value, float)
@@ -72,7 +67,6 @@ class DataSet(object):
         Byte2  E0  M22 M21 M20   M19 M18 M17 M16        SGE - Signal of Exponent: 0 - Positive 1 - Negative
         Byte1  M15 M14 M13 M12   M11 M10 M9  M8         E[6:0] - Exponent
         Byte0  M7  M6  M5  M4    M3  M2  M1  M0         M[22:0] - Mantissa.
-
         :param n:     the point to set
         :param value: the Value of the point being set."""
 
@@ -231,13 +225,18 @@ class LTSpiceRawRead(object):
 
         while line:
             startpos += len(line)
-
+            #for tag in self.header_lines:
+            #    print(tag)
+            #input("pause")
             for tag in self.header_lines:
                 if line.startswith(tag):
                     self.raw_params[tag] = line[len(tag) + 1:-1]  # Adding 1 to account with the colon after the tag
                     # print(ftag)
                     break
+                #input("pause")
             else:
+                print(tag)
+                print("here")
                 raw_file.close()
                 raise LTSPiceReadException(("Error reading Raw File !\n " +
                                             "Unrecognized tag in line %s") % line)
@@ -260,11 +259,11 @@ class LTSpiceRawRead(object):
         self._traces = []
         self.steps = None
         self.axis = None  # Creating the axis
-
+        # print("Reading Variables")
 
         for ivar in range(self.nVariables):
             line = raw_file.readline().decode()[:-1]
-
+            # print(line)
             dummy, n, name, var_type = line.split("\t")
             if ivar == 0 and self.nVariables > 1:
                 self.axis = Axis(name, var_type, self.nPoints)
@@ -387,6 +386,7 @@ class LTSpiceRawRead(object):
         if isinstance(trace_ref, str):
             for trace in self._traces:
                 if trace_ref == trace.name:
+                    # assert isinstance(trace, DataSet)
                     return trace
             return None
         else:
@@ -454,10 +454,13 @@ if __name__ == "__main__":
         raw_filename = sys.argv[1]
     else:
         raw_filename = "CSL2_kevin_Test.raw"
+        # raw_filename = "teste.raw"
 
     LTR = LTSpiceRawRead(raw_filename,'V(out)')
 
     print(LTR.get_trace_names())
+    # for trace in LTR.get_trace_names():
+    #     print(LTR.get_trace(trace))
 
     print(LTR.get_raw_property())
 
@@ -465,7 +468,17 @@ if __name__ == "__main__":
     x = LTR.get_trace(0)  # Zero is always the X axis
     steps = LTR.get_steps(ana=4.0)
     for step in steps:
+        # print(steps[step])
         plt.plot(x.get_wave(step), y.get_wave(step), label=LTR.steps[step])
 
     plt.legend()  # order a legend.
     plt.show()
+
+
+
+    # out = open("RAW_TEST_out_test1.txt", 'w')
+    #
+    # for step in LTR.get_steps():
+    #     for x in range(len(LTR[0].data)):
+    #         out.write("%s, %e, %e\n" % (step, LTR[0].data[x], LTR[2].data[x]))
+# out.close()
