@@ -5,6 +5,8 @@ from utils import getV
 import numpy as np
 import seaborn as sns; sns.set(color_codes = True)
 import math
+
+
 def FFT_plot(filenames):
     decible_lst = []
     sample_rate = 11025
@@ -46,5 +48,6 @@ def FFT_analysis(filename):
     a = data.T[0] #This is a two channel soundtrack? Take first one.
     b=[(ele/2**16.)*2 for ele in a] # this is 16-bit track, b is now normalized on [-1,1)
     c = fft(b) # calculate fourier transform (complex numbers list)
-    d = len(c)/2  # you only need half of the fft list (real signal symmetry)
+    d = int(len(c)/2)  # you only need half of the fft list (real signal symmetry)
+
     return (np.log10(abs(c[:(d-1)]))*20)

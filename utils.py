@@ -5,7 +5,7 @@ from random import shuffle, sample
 import math
 import pickle
 from FindVoiceTiming import voiceTimings
-from SpiceModifier import GenerateLabels
+from SpiceModifier import GenerateLabels, GenerateTestStartLabel
 
 
 def getV(v, audio, Train_Test_Split, label):
@@ -78,6 +78,9 @@ def genVTest(V_test, silence,folderName):
 
     print("Len of VTest:")
     print(len(V_test))
+
+    #Generate Test Start Label
+    GenerateTestStartLabel(silence.duration_seconds, V_Test_Wav.duration_seconds, folderName)
 
     # Export The Wav file
     V_Test_Wav.export(os.path.join('.', "SimInput", folderName, "V_test.wav"), format="wav")
@@ -167,7 +170,7 @@ def GetUserInput(Text):
 
         # Kinda a bad cop-out for now. should work in 7/9 cases currently. Good enough.
         # Upgrade would be an expansive if statement based on how many choices correspond to each text option.
-        if choice == 1 or choice == 2 or choice == 3 or choice == 4 or choice == 5 or choice ==6:
+        if choice >= 1 and choice <= 7:
             InputChecker = True
         else:
             os.system('cls' if os.name == 'nt' else 'clear')

@@ -2,12 +2,12 @@
 def fix_bytes(filename):
     filepath = 'Net Array_Small.raw'
     l = []
-    headerlen = 105
+    headerlen = 112
     with open(filename,'rb') as fp:
         for cnt, line in enumerate(fp):
             if cnt < headerlen:
                 list_line = list(line)
-                
+
                 #Sometimes its even, sometimes its odd.
                 if(list_line[0] == 0):
                     line = bytes(list_line[1::2])

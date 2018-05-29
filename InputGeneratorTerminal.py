@@ -8,34 +8,29 @@ from TestStruct import MultiV, SingleV
 from utils import GetUserInput
 from SamplePatterns import samplePattern
 from FFT_Analysis import FFT_plot
+from SpiceModifier import GenerateFilterBank
 
-"""
-Here's an interesting idea: If we want to fuck around with the filter params a lot
-it will get real tedious really fast. We could make a filter bank template like
-the output labels and make it so that we input filter bands and it creates the
-resistor and capacitor elements. It could also store profiles of good ones in
-pickle files.
-"""
 def main():
 
     Title = """
-                        _ _          _____                           _
-         /\            | (_)        / ____|                         | |
-        /  \  _   _  __| |_  ___   | |  __  ___ _ __   ___ _ __ __ _| |_ ___  _ __
-       / /\ \| | | |/ _` | |/ _ \  | | |_ |/ _ \ '_ \ / _ \ '__/ _` | __/ _ \| '__|
-      / ____ \ |_| | (_| | | (_) | | |__| |  __/ | | |  __/ | | (_| | || (_) | |
-     /_/    \_\__,_|\__,_|_|\___/   \_____|\___|_| |_|\___|_|  \__,_|\__\___/|_|
+                    _ _          _____                           _
+     /\            | (_)        / ____|                         | |
+    /  \  _   _  __| |_  ___   | |  __  ___ _ __   ___ _ __ __ _| |_ ___  _ __
+   / /\ \| | | |/ _` | |/ _ \  | | |_ |/ _ \ '_ \ / _ \ '__/ _` | __/ _ \| '__|
+  / ____ \ |_| | (_| | | (_) | | |__| |  __/ | | |  __/ | | (_| | || (_) | |
+ /_/    \_\__,_|\__,_|_|\___/   \_____|\___|_| |_|\___|_|  \__,_|\__\___/|_|
 
 
-    Enter a Train/Test configuration:
-    (1) Single Voice Randomized
-    (2) Random / Random
-    (3) Alternating / Random
-    (4) Alternating / Alternating
+Enter a Train/Test configuration:
+(1) Single Voice Randomized
+(2) Random / Random
+(3) Alternating / Random
+(4) Alternating / Alternating
 
-    Extra Functionality:
-    (5) View a generated sequence order
-    (6) FFT analysis of audio
+Extra Functionality:
+(5) View a generated sequence order
+(6) FFT analysis of audio
+(7) Generate FilterBank.asc based on frequency ranges
     """
 
     mode = GetUserInput(Title)
@@ -70,7 +65,6 @@ Permute over all voice pairs?:
                         vfile = os.path.join(x[0], V+"_Normalized_NoiseReduced.wav")
                         AudioLst.append(vfile)
             FFT_plot(AudioLst)
-
         else:
             # Manually pick the voices
             print("Available Audio Data Folder Names:")
@@ -84,6 +78,8 @@ Permute over all voice pairs?:
             vfile = os.path.join(dir_path,"FullAudio", V, V+"_Normalized_NoiseReduced.wav")
             print(vfile)
             FFT_plot(vfile)
+    elif mode == 7:
+        GenerateFilterBank()
 
     else:
 
@@ -104,7 +100,7 @@ Train-Test-Split Type:
         typeDialog ="""
 Permute over all voice pairs?:
 (1) Yes
-W(2) No
+(2) No
         """
         isPermute = GetUserInput(typeDialog)
 
