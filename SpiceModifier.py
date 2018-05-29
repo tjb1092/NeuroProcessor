@@ -42,10 +42,7 @@ def GenerateTestStartLabel(silence,testlength, folderName):
 
     #Create new command
     newString = "SYMATTR Value PULSE(0 -12 " + "{0:.3f}".format(silence)+ " .01 .01 " + "{0:.3f}".format(testlength) + " " + "{0:.3f}".format(5+silence+testlength) + " 1)\n"
-    print(newString)
-    input("pause")
     content[index] = newString #Override template w/ new command
-
 
     # Write out newly modified file into the main directory
     voltage_element_fn = os.path.join(dir_path,'SimInput', folderName, 'StartTestLabel.asc')
