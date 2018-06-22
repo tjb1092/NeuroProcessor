@@ -55,7 +55,6 @@ Permute over all voice pairs?:
         isPermute = GetUserInput(typeDialog)
         FullAudioFolder = os.path.join(dir_path,"FullAudio")
         if(isPermute == 1):
-            #Doing this second
             AudioLst = []
             for x in os.walk(FullAudioFolder):
                 if x[0] != FullAudioFolder:
