@@ -7,18 +7,18 @@ import seaborn as sns; sns.set(color_codes = True)
 import math
 from utils import GetUserInput
 import os
-import subprocess
+from subprocess import call
+import glob
 import pickle
 from SPICE_Raw_UnicodeFix import fix_bytes
+import time
 
-def DataLoader():
 
-    subprocess.call(os.path.join('.', "rmFrames.sh"))
-
+def DataLoader(f, fp):
     choice = input("Load New Data? [y/n]: ")
     if choice == "y":
         print("Loading Raw Data")
-        SPICE_Obj = LTSpiceRawRead('Net Array_Small.raw')
+        SPICE_Obj = LTSpiceRawRead(fp)
         print('SPICE Object Created')
 
         #Need time, audioin, neuronin, neuronin2, predict, predict2
@@ -52,14 +52,14 @@ def DataLoader():
                 "W8_2": SPICE_Obj.get_trace('V(vmem8_2)').data}
     else:
         #Recall pickled data for a quicker "cached" load time.
-        Data = pickle.load(open( os.path.join('.', "SimInput", "raw_data.p"), "rb" ) )
+        Data = pickle.load(open( os.path.join(f, "raw_data.p"), "rb" ) )
 
     return Data
 
 
 
 # Save each frame in a file for stitching into a .gif and .mp4
-def Save_Frame(i, Data, SkipFactor):
+def Save_Frame(i, Data, Fname, SkipFactor):
 
     Audio = np.concatenate((Data["audioin"][0:(i*SkipFactor)],np.zeros(len(Data["t"])-(i*SkipFactor))))
     in1 = np.concatenate((Data["nIn1"][0:(i*SkipFactor)],np.zeros(len(Data["t"])-(i*SkipFactor))))
@@ -99,27 +99,26 @@ def Save_Frame(i, Data, SkipFactor):
     a0.legend(loc='upper right')
 
     f.tight_layout()
-    f.savefig('Frames/frame'+str(i)+'.png', dpi=300)
+    f.savefig("Visualizations/{}/Frames/frame{}.png".format(Fname, str(i)), dpi=300)
 
     plt.close(f)
     return
 
+def Raw_DataPickle(f, Data):
+    # Store data into pickle file for later if needed.
+    pickle.dump( Data, open( os.path.join(f, "raw_data.p"), "wb" ) )
+    return
 
-def CompleteGIF(SkipFactor):
+def PlotRawData(f, name, fp, SkipFactor):
 
-    Data = DataLoader()
-    Raw_DataPickle(Data)
+    Data = DataLoader(f, fp)
+    Raw_DataPickle(f, Data)
     frame_num=math.ceil(len(Data["t"])/SkipFactor)
     for frame in range(1,frame_num):
         print ("Frame: " + str(frame) + "/ " + str(frame_num), end="\r")
-        Save_Frame(frame, Data, SkipFactor)
+        Save_Frame(frame, Data, name, SkipFactor)
     #Runs Bash script to make the video
-    subprocess.call(os.path.join('.', "VidMaker.sh"))
-
-def Raw_DataPickle(Data):
-    # Store data into pickle file for later if needed.
-    pickle.dump( Data, open( os.path.join('.', "SimInput", "raw_data.p"), "wb" ) )
-    return
+    #subprocess.call(os.path.join('.', "VidMaker.sh"))
 
 def main():
     """
@@ -127,7 +126,7 @@ def main():
     Determines how long the animations runs for and can be tuned to approx.
     "real-time" for demonstration purposes.
     """
-    SkipFactor = 500
+    SkipFactor = 1000
 
 
     Title = """
@@ -139,11 +138,57 @@ def main():
      |_____/ \__, |_| |_|\__,_| .__/ \__|_|\___|     \/   |_|___/\__,_|\__,_|_|_/___\___|_|
               __/ |           | |
              |___/            |_|
+
+    Select an option:
+    1.) One Voice
+    2.) All Voices
     """
 
     os.system('cls' if os.name == 'nt' else 'clear')
-    print(Title)
-    fix_bytes("Net Array_Small.raw")
-    CompleteGIF(SkipFactor)
+    mode = GetUserInput(Title)
+
+    message = """
+Which Computer did this come from?
+1.) Tony's Tower
+2.) Tony's Workstation
+3.) Other
+    """
+    computer = GetUserInput(message)
+
+
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    DataFolder = os.path.join(dir_path, 'SimOutput')
+    last_time = time.time()
+    if(mode == 2):
+        for x in os.walk(DataFolder):
+            if x[0] != DataFolder:
+                V = x[0].replace(DataFolder, "")[1:]
+                call(['rm' , '--']+ glob.glob("Visualizations/{}/Frames/*".format(V)))
+                vfile = os.path.join(x[0], "Net Array_Small.raw")
+                print(V)
+                """
+                if computer == 1:
+                    fix_bytes(vfile)￼
+                """
+                print(vfile)
+                print(x[0])
+                input("pause")
+                PlotRawData(x[0], V, vfile, SkipFactor)
+                print('Process took {:0.2f} min'.format((time.time()-last_time)/60.))
+                last_time = time.time()
+    if mode == 1:
+        FileLst = []
+        for x in os.walk(DataFolder):
+            if x[0] != DataFolder:
+                V = x[0].replace(DataFolder, "")[1:]
+                print(V)
+
+        choice = input("Please choose a file to visualize: ")
+        fp = os.path.join(dir_path,"SimOutput",choice)
+
+        vfile = os.path.join(fp, "Net Array_Small.raw")
+        PlotRawData(fp, choice, vfile, SkipFactor)
+        print('Process took {:0.2f} min'.format((time.time()-last_time)/60.))
+
 
 main()
