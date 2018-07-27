@@ -15,3 +15,6 @@ PINATTR SpiceOrder 1
 PIN 64 0 NONE 8
 PINATTR PinName Vout
 PINATTR SpiceOrder 2
+PIN 32 16 NONE 8
+PINATTR PinName 5V+
+PINATTR SpiceOrder 3
