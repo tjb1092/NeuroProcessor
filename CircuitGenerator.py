@@ -91,6 +91,7 @@ def main():
                 new_string = "Xsyn{}{} pre{} post{} mon{}{} STRAM \n".format(m, n, m, n, m, n)
                 content.append(new_string)
                 new_string = "XB{}{} testpre{} testpost{} mon{}{} train BStore \n".format(m, n, m, n, m, n)
+                content.append(new_string)
 
     if testMode > 3:
         for n in range(num_classes):
