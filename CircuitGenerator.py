@@ -32,7 +32,15 @@ Synapse: pre, post, monitor
 
 i = pre0 - prem
 o = post0 - postn
+monitor = mon00 - monmn
+
+- mxn BStore Array: XB00 - XBmn
+Bstore: pre, post, monitor, train
+
+i = testpre0 - testprem
+o = testpost0 - testpostn
 state = vsyn00 - vsynmn
+train = vTrain
 
 - Bidirectional Amplifiers: Xbda0 - Xbdan
 BDA: Vpost, Vnin, vnout, label
@@ -82,6 +90,7 @@ def main():
             for n in range(num_classes):
                 new_string = "Xsyn{}{} pre{} post{} mon{}{} STRAM \n".format(m, n, m, n, m, n)
                 content.append(new_string)
+                new_string = "XB{}{} testpre{} testpost{} mon{}{} train BStore \n".format(m, n, m, n, m, n)
 
     if testMode > 3:
         for n in range(num_classes):

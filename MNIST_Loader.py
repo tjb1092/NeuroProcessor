@@ -118,10 +118,7 @@ def test_loader():
 
 def Generate_IO_Voltages(content, pattern, name, T_T):
     p_shape = pattern.shape
-    num_sources = p_shape[0]  # Index the first term in shape.
-
-    source_counter = 0
-
+    num_sources = p_shape[0]  # Index the first term in shapeself.
 
     for source in range(num_sources):
 
@@ -150,6 +147,26 @@ def Generate_IO_Voltages(content, pattern, name, T_T):
 
 
 
+def test_loader():
+    # Some simple test data to try out
+    samples = np.array(((0, 255, 0, 255, 0, 255, 0, 255, 0),
+                        (255, 0, 255, 0, 255, 0, 255, 0, 255),
+                        (0,  0, 255, 0, 0, 255, 0, 0, 255),
+                        (255, 255, 255, 0, 0, 0, 0, 0, 0),
+                        (0, 0, 0, 255, 255, 255, 0, 0, 0),
+                        (0, 0, 0, 0, 0, 0, 255, 255, 255),
+                        (255, 0, 0, 255, 0, 0, 255, 0, 0),
+                        (0, 255, 0, 0, 255, 0, 0, 255, 0)))
+    labels = np.array(((0),
+                        (1),
+                        (2),
+                        (3),
+                        (4),
+                        (5),
+                        (6),
+                        (7)))
+    print(samples.shape, labels.shape)
+    return samples, labels
 
 
 def main():
