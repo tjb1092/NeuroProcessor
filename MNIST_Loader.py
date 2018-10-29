@@ -1,10 +1,13 @@
 import numpy as np
 from mnist import MNIST
 from SpiceModifier import SpiceWriter
-mndata = MNIST('/home/tonyjb/MNIST')
+mndata = MNIST('C:\\Users\\baile\\data\\mnist\\')
 
 # Some global vars
 vdd = 3.3  # Voltages will be relative to the process node voltage
+imax = 100e-6
+imin = 1e-6
+
 #feature_length = 784
 #num_classes = 10
 feature_length = 9
@@ -22,7 +25,7 @@ def encode_digits(images, labels, initial_duration):
     # Scale images:
     im_scaled = np.zeros((len(images),feature_length))
     for istep, im in enumerate(images):
-        im_scaled[istep] = np.multiply((vdd/255.0),im)
+        im_scaled[istep] = np.multiply((-imax/255.0),im)
 
     # Now encode MNIST digits into 784 voltage sources w/ PWL functions
     # Input Struct: [pixel_num: [time, val]] - List of lists
@@ -118,12 +121,20 @@ def test_loader():
 
 def Generate_IO_Voltages(content, pattern, name, T_T):
     p_shape = pattern.shape
-    num_sources = p_shape[0]  # Index the first term in shapeself.
+    num_sources = p_shape[0]  # Index the first term in shape.
+
+    source_counter = 0
+
+    if name == "i":
+        prefix = "i"
+    else:
+        prefix = "v"
 
     for source in range(num_sources):
 
         if T_T == 1:
             # Training Source
+
             vi = "v{}{}".format(name, source)
             vo = "v{}{}t".format(name, source)
             t_t = "tr"
@@ -135,10 +146,10 @@ def Generate_IO_Voltages(content, pattern, name, T_T):
 
 
         #For each source, append the correct information per sample to the string.
-        newString = "V{}{}{} {} {} pwl(".format(name, source, t_t,  vi, vo)
+        newString = "{}{}{}{} {} {} pwl(".format(prefix, name, source, t_t,  vi, vo)
 
         for row in pattern[source]:
-            newString += " {0:.7f} {1:.3f}".format(row[0], row[1])
+            newString += " {0:.7f} {1}".format(row[0], row[1])
 
         newString += ")\n"
         content.append(newString) #Override template w/ new command
@@ -183,6 +194,7 @@ def main():
         im_test, label_test = test_loader()
 
 
+    # New way: images are in current values. Labels are in voltage values
     print("Generating voltages for training:")
     input_train, output_train, train_duration = encode_digits(im_train, label_train, 0)
 
