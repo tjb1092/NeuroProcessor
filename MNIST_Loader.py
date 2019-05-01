@@ -17,8 +17,6 @@ imin = 1e-6
 
 feature_length = 35
 num_classes = 10
-#feature_length = 9
-#num_classes = 6
 
 Toff = Ton = 0.015  # Duration of on vs. off time.
 T_rf = 1e-7  # Rise and fall time
